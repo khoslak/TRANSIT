@@ -97,14 +97,26 @@
             let hours = currentDate.getHours() - 1;
             let minutes = currentDate.getMinutes();
             let seconds = currentDate.getSeconds();
-            let time = "01:00:00";
+            let min = 00;
+            let sec = 00;
+
 
             if (currentDate.getSeconds() > 20 && currentDate.getMinutes() > 10) {
-                minutes = minutes - 5;
-                seconds = seconds - 17;
-                time = "01" + ':' + minutes + ':' + seconds;
+                min = minutes - 5;
+                sec = seconds - 17;
 
             }
+
+            let s = "";
+            let s1 = "";
+            if (min <= 9) {
+                s = "0";
+            }
+            if (sec <= 9) {
+                s1 = "0"
+            }
+
+            let time = "01" + ":" + s + min + ":" + s1 + sec;
             return time;
 
         }
