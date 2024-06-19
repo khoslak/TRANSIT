@@ -121,10 +121,12 @@
 
         }
 
+
         window.onload = function () {
             document.getElementById("date").textContent = getCurrentDateTime();
             document.getElementById("date-active").textContent = timeSinceActivation();
         };
+
     </script>
     <title>Ticket</title>
     <link rel="shortcut icon" href="https://eticket-prod.mozio.com/1-0-18-230524131910/favicon.ico">
@@ -775,8 +777,7 @@
         }
 
         .status__text.activated {
-            -webkit-animation: activatedColor 2s linear infinite;
-            animation: activatedColor 2s linear infinite;
+
             font-size: 6vw;
             padding: 0 3vw
         }
@@ -1022,6 +1023,27 @@
                 transform: translateX(-305px)
             }
         }
+
+        .fade-in-out {
+            animation: fadeInOut 1s ease-in-out infinite;
+            opacity: 1;
+            /* Start with opacity 0 */
+        }
+
+        @keyframes fadeInOut {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            /* Start and end at opacity 0 */
+            100% {
+                opacity: 0;
+            }
+
+            /* Midpoint at opacity 1 */
+        }
     </style>
     <style id="cssobj_1dgdpn01_"></style>
 </head>
@@ -1096,7 +1118,15 @@
                 <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NzYgMTA4Ij48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2IzYjZiYX08L3N0eWxlPjwvZGVmcz48dGl0bGU+aWMtY29kZS1hY3RpdmU8L3RpdGxlPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTAgMGg4djEwOEgwem01MiAwaDh2MTA4aC04em0xNyAwaDE3djEwOEg2OXptMTI3IDBoMTd2MTA4aC0xN3ptMTMxIDBoMTd2MTA4aC0xN3ptMTMwIDBoMTd2MTA4aC0xN3ptMjA2IDBoMTN2MTA4aC0xM3ptLTc5IDBoMTd2MTA4aC0xN3pNMjc1IDBoMjV2MTA4aC0yNXptMTMwIDBoMjV2MTA4aC0yNXptMTI3IDBoMjV2MTA4aC0yNXpNOTYgMGg4djEwOGgtOHptMTcgMGg4djEwOGgtOHptMTA5IDBoOHYxMDhoLTh6bTE4IDBoOHYxMDhoLTh6bTcwIDBoOHYxMDhoLTh6bTEzMCAwaDh2MTA4aC04ek0yNTggMGg4djEwOGgtOHptOTUgMGg4djEwOGgtOHptMTMxIDBoOHYxMDhoLTh6bTgyIDBoOHYxMDhoLTh6bTQ0IDBoOHYxMDhoLTh6bTE4IDBoOHYxMDhoLTh6bTE3IDBoOHYxMDhoLTh6TTUwMSAwaDh2MTA4aC04em0xMyAwaDh2MTA4aC04ek0zNzAgMGg4djEwOGgtOHptMTggMGg4djEwOGgtOHpNMTI2IDBoOHYxMDhoLTh6bTUyIDBoOHYxMDhoLTh6TTE3IDBoMjV2MTA4SDE3em0xMjcgMGgyNXYxMDhoLTI1eiIgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiIvPjwvc3ZnPg=="
                     class="status__icon">
                 <div class="status__text default">Inactive</div>
-                <div class="status__text activated">Valid for travel</div>
+                <div class="status__text activated">
+                    <span class="fade-in-out" id="blink">Valid for travel</span>
+                    <script>
+                        setInterval(function () {
+                            var fade = document.getElementById("blink");
+                            fade.classList.toggle('fade-in-out');
+                        }, 1000);
+                    </script>
+                </div>
                 <div class="status__text pending">Not valid for travel</div>
                 <div class="status__text expired">Expired</div>
             </div>
@@ -1129,10 +1159,10 @@
             </div>
             <div class="area__space"></div>
             <div class="area__default__info">
-                <span id="ticket-pending-time-sequence" style="display: inline;">Your ticket will become valid <b><span
-                            id="pending-time">5 minutes</span> after you press "ACTIVATE".</b><br></span>
-                <span id="ticket-validity-time-sequence" style="display: inline;">Your ticket will be <b>valid for <span
-                            id="active-time">4 hours</span>.</b></span>
+                <span id="ticket-pending-time-sequence" style="display: inline;">Your ticket will become valid
+                    <b><span id="pending-time">5 minutes</span> after you press "ACTIVATE".</b><br></span>
+                <span id="ticket-validity-time-sequence" style="display: inline;">Your ticket will be <b>valid for
+                        <span id="active-time">4 hours</span>.</b></span>
             </div>
         </div>
 
