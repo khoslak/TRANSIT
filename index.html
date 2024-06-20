@@ -8,6 +8,7 @@
     <meta name="author" content="Mozio Inc.">
     <meta name="description" content="">
     <script type="text/javascript">
+        var globalTimer = 0;
         function getActiveDateTime() {
             // Create a new Date object
             let currentDate = new Date();
@@ -78,53 +79,54 @@
             // Construct the formatted date and time string
             let formattedDateTime = `${month} ${day} ${year}, ${hours}:${minutes}:${seconds} ${period}`;
 
+            document.getElementById("date").textContent = formattedDateTime;
+
             // Return the formatted date and time
-            return formattedDateTime;
         }
         // Call the function to get and display the current time
 
         function timeSinceActivation() {
-            let currentDate = new Date();
 
-            // Array of month names
-            let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            var currentDate = new Date();
 
-            // Get the current month, day, year, hours, minutes, seconds
-            let month = months[currentDate.getMonth()];
-            let day = currentDate.getDate();
-            let year = currentDate.getFullYear();
-            let hours = currentDate.getHours() - 1;
-            let minutes = currentDate.getMinutes();
-            let seconds = currentDate.getSeconds();
-            let min = 00;
-            let sec = 00;
+            // Calculate the time in milliseconds to subtract
+            var millisecondsToSubtract = (35 * 60 + 45 + globalTimer) * 1000; // 35 minutes + 45 seconds in milliseconds
+
+            // Create a new Date object representing the past time
+            var pastDate = new Date(currentDate.getTime() - millisecondsToSubtract);
+
+            var difference = Math.abs(currentDate.getTime() - pastDate.getTime());
+
+            // Convert the difference to hours, minutes, seconds
+            var seconds = Math.floor(difference / 1000);
+            var hours = Math.floor(seconds / 3600);
+            seconds %= 3600;
+            var minutes = Math.floor(seconds / 60);
+            seconds %= 60;
+
+            // Format the result as hh:mm:ss
+            var formattedDifference = pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+
+            document.getElementById("date-active").textContent = formattedDifference;
+
+            globalTimer++;
 
 
-            if (currentDate.getSeconds() > 20 && currentDate.getMinutes() > 10) {
-                min = minutes - 5;
-                sec = seconds - 17;
-
-            }
-
-            let s = "";
-            let s1 = "";
-            if (min <= 9) {
-                s = "0";
-            }
-            if (sec <= 9) {
-                s1 = "0"
-            }
-
-            let time = "01" + ":" + s + min + ":" + s1 + sec;
-            return time;
 
         }
 
+        function pad(num, size) {
+            var s = num + "";
+            while (s.length < size) s = "0" + s;
+            return s;
+        }
+
+
+
 
         window.onload = function () {
-            document.getElementById("date").textContent = getCurrentDateTime();
-            document.getElementById("date-active").textContent = timeSinceActivation();
+            getCurrentDateTime();
+            timeSinceActivation();
         };
 
     </script>
@@ -1131,14 +1133,20 @@
                 <div class="status__text expired">Expired</div>
             </div>
             <div class="date">
-                <div class="date__column" onload="getCurrentDateTime()">
+                <div class="date__column">
                     <div class="date__header">CURRENT TIME:</div>
                     <div class="date__value" id="date">
                     </div>
+                    <script>
+                        setInterval(getCurrentDateTime, 1000);
+                    </script>
                 </div>
                 <div class="date__column activated">
                     <div class="date__header">TIME SINCE ACTIVATION:</div>
                     <div class="date__value" id="date-active">&nbsp;</div>
+                    <script>
+                        setInterval(timeSinceActivation, 1000);
+                    </script>
                 </div>
             </div>
         </div>
