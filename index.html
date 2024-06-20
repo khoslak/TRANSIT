@@ -123,10 +123,27 @@
 
 
 
+        function updateStations(departingStation, arrivalStation) {
+            if (departingStation === '' || arrivalStation === '') {
+                alert("defaulting to predefined values");
+                return;
+            }
+
+            if (!departingStation.endsWith("GO") || !arrivalStation.endsWith("GO")) {
+                alert("defaulting to predefined values");
+                return;
+            }
+
+            document.getElementById('route').textContent = departingStation + " to " + arrivalStation
+
+        }
 
         window.onload = function () {
+            var departingStation = prompt("Enter departure location");
+            var arrivalStation = prompt("Enter Arrival location")
             getCurrentDateTime();
             timeSinceActivation();
+            updateStations(departingStation, arrivalStation);
         };
 
     </script>
