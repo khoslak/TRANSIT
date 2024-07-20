@@ -151,6 +151,11 @@
                 return;
             }
 
+             if (departingStation === '' || arrivalStation === '') {
+                alert("defaulting to predefined values");
+                return;
+            }
+
 
             document.getElementById('route').textContent = departingStation + " to " + arrivalStation
 
