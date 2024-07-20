@@ -109,11 +109,33 @@
 
             document.getElementById("date-active").textContent = formattedDifference;
 
+
             globalTimer++;
 
 
 
         }
+
+        function activationWindowTimer(duration, display) {
+            var timer = duration, hours, minutes, seconds;
+            setInterval(function () {
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = hours + ":" + minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    timer = duration;
+                }
+            }, 1000);
+        }
+
+
 
         function pad(num, size) {
             var s = num + "";
@@ -124,15 +146,11 @@
 
 
         function updateStations(departingStation, arrivalStation) {
-            if (departingStation === '' || arrivalStation === '') {
+            if (departingStation === null || arrivalStation === null) {
                 alert("defaulting to predefined values");
                 return;
             }
 
-            if (!departingStation.endsWith("GO") || !arrivalStation.endsWith("GO")) {
-                alert("defaulting to predefined values");
-                return;
-            }
 
             document.getElementById('route').textContent = departingStation + " to " + arrivalStation
 
@@ -141,8 +159,11 @@
         window.onload = function () {
             var departingStation = prompt("Enter departure location");
             var arrivalStation = prompt("Enter Arrival location")
+            var validTime = document.getElementById("valid-time");
+            var countTimer = 12300
             getCurrentDateTime();
             timeSinceActivation();
+            activationWindowTimer(countTimer, validTime);
             updateStations(departingStation, arrivalStation);
         };
 
@@ -1201,11 +1222,15 @@
             <div class="area area__activated any-activated">
                 <div class="area__space"></div>
                 <div class="area__activated__info">
-                    <span class="area__fullyActiveInfo">Please show this screen to the proper authority on board the
-                        train.</span>
+                    <br /><br /> <br /> <br /> <span class="area__fullyActiveInfo">Please show this screen to the proper
+                        authority on board the train.</span>
                     <span class="area__pending">Your ticket will become valid for travel in</span>
 
-                    <div class="area__activated__timer" id="valid-time"></div>
+                    <div class="area__activated__timer" id="valid-time">
+                        <script>
+                            setInterval(timeSinceActivation, 1000);
+                        </script>
+                    </div>
                 </div>
             </div>
         </div>
